@@ -150,73 +150,7 @@ void listenForClients()
                             }
                             webFile.close();
                         }
-                    }/*
-                    else if (StrContains(HTTP_req, "GET /img/svg.svg"))
-                    {
-                        Serial.println("img/ag.jpg");
-                        webFile = SD.open("img/svg.svg");
-                        delay(100);
-                        if (webFile)
-                        {
-                            client.println();
-
-                            byte clientBuf[64];
-                            int clientCount = 0;
-
-                            while (webFile.available())
-                            {
-                                clientBuf[clientCount] = webFile.read();
-                                clientCount++;
-
-                                if (clientCount > 63)
-                                {
-                                    // Serial.println("Packet");
-                                    client.write(clientBuf, 64);
-                                    clientCount = 0;
-                                }
-                            }
-                            //final <64 byte cleanup packet
-                            if (clientCount > 0)
-                                client.write(clientBuf, clientCount);
-                            // close the file:
-                            webFile.close();
-                            Serial.println("close png");
-                        }
-                        delay(1);
                     }
-                    else if (StrContains(HTTP_req, "GET /img/ap.jpg"))
-                    {
-                        Serial.println("img/ap.jpg");
-                        webFile = SD.open("img/ap.jpg");
-                        delay(100);
-                        if (webFile)
-                        {
-                            client.println();
-
-                            byte clientBuf[64];
-                            int clientCount = 0;
-
-                            while (webFile.available())
-                            {
-                                clientBuf[clientCount] = webFile.read();
-                                clientCount++;
-
-                                if (clientCount > 63)
-                                {
-                                    // Serial.println("Packet");
-                                    client.write(clientBuf, 64);
-                                    clientCount = 0;
-                                }
-                            }
-                            //final <64 byte cleanup packet
-                            if (clientCount > 0)
-                                client.write(clientBuf, clientCount);
-                            // close the file:
-                            webFile.close();
-                            Serial.println("close png");
-                        }
-                        delay(1);
-                    }*/
                     else if (StrContains(HTTP_req, "GET /img/focooff.png"))
                     {
                         Serial.println("img/focooff.png");

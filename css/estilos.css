@@ -3,6 +3,7 @@
   padding: 0px;
   box-sizing: border-box;
 }
+
 body {
   width: 100vw;
   /*height: 100%;*/
@@ -110,4 +111,35 @@ button {
 h5 {
   margin: 6px;
   color: rgb(88, 88, 88);
+}
+
+
+/*svg bombilla*/
+.svgon-1{
+ fill: #ffda00;
+}
+.svgon-2{
+  fill: #ccae00;
+}
+
+.svg-1 {
+ 
+  fill: #535352;
+}
+.svg-2 {
+  /* fill: #ccae00;*/
+  fill: #b8b7b3;
+}
+.cls-3 {
+  fill: #78909c;
+}
+.cls-4 {
+  fill: #cfd8dd;
+}
+.cls-5 {
+  fill: #b0bec5;
+}
+.cls-6 {
+  fill: #fff;
+  opacity: 0.4;
 }

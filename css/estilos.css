@@ -115,17 +115,15 @@ h5 {
   color: rgb(88, 88, 88);
 }
 
-
 /*svg bombilla*/
-.svgon-1{
- fill: #ffda00;
+.svgon-1 {
+  fill: #ffda00;
 }
-.svgon-2{
+.svgon-2 {
   fill: #ccae00;
 }
 
 .svg-1 {
- 
   fill: #535352;
 }
 .svg-2 {

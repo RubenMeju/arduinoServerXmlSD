@@ -23,7 +23,7 @@ EthernetServer server(80);       // create a server at port 80
 File webFile;                    // the web page file on the SD card
 char HTTP_req[REQ_BUF_SZ] = {0}; // buffered HTTP request stored as null terminated string
 char req_index = 0;              // index into HTTP_req buffer
-boolean LED_state[4] = {0};      // stores the states of the LEDs
+boolean LED_state[2] = {0};      // stores the states of the LEDs
 
 //tiempos
 int periodo = 1000;
@@ -95,6 +95,7 @@ void setup()
 
 void loop()
 {
+    ag_modo12h();
     listenForClients();
 }
 
@@ -150,7 +151,7 @@ void listenForClients()
                             }
                             webFile.close();
                         }
-                    }
+                    } /*/
                     else if (StrContains(HTTP_req, "GET /img/focooff.png"))
                     {
                         Serial.println("img/focooff.png");
@@ -216,7 +217,7 @@ void listenForClients()
                             Serial.println("close png");
                         }
                         delay(1);
-                    }
+                    }*/
                     else
                     { // web page request
                         // send rest of HTTP header
@@ -263,48 +264,26 @@ void listenForClients()
 // also saves the state of the LEDs
 void SetLEDs(void)
 {
-    // LED 1 (pin 6)
+    // LED 1 (pin 8)
     if (StrContains(HTTP_req, "LED1=1"))
     {
         LED_state[0] = 1; // save LED state
-        digitalWrite(6, HIGH);
+        digitalWrite(8, HIGH);
     }
     else if (StrContains(HTTP_req, "LED1=0"))
     {
         LED_state[0] = 0; // save LED state
-        digitalWrite(6, LOW);
+        digitalWrite(8, LOW);
     }
-    // LED 2 (pin 7)
+    // LED 2 (pin 9)
     if (StrContains(HTTP_req, "LED2=1"))
     {
         LED_state[1] = 1; // save LED state
-        digitalWrite(7, HIGH);
+        digitalWrite(9, HIGH);
     }
     else if (StrContains(HTTP_req, "LED2=0"))
     {
         LED_state[1] = 0; // save LED state
-        digitalWrite(7, LOW);
-    }
-    // LED 3 (pin 8)
-    if (StrContains(HTTP_req, "LED3=1"))
-    {
-        LED_state[2] = 1; // save LED state
-        digitalWrite(8, HIGH);
-    }
-    else if (StrContains(HTTP_req, "LED3=0"))
-    {
-        LED_state[2] = 0; // save LED state
-        digitalWrite(8, LOW);
-    }
-    // LED 4 (pin 9)
-    if (StrContains(HTTP_req, "LED4=1"))
-    {
-        LED_state[3] = 1; // save LED state
-        digitalWrite(9, HIGH);
-    }
-    else if (StrContains(HTTP_req, "LED4=0"))
-    {
-        LED_state[3] = 0; // save LED state
         digitalWrite(9, LOW);
     }
 }
@@ -313,8 +292,6 @@ void SetLEDs(void)
 void XML_response(EthernetClient cl)
 {
     int t1, h1, t2, h2;
-    int count;                // used by 'for' loops
-    int sw_arr[] = {2, 3, 5}; // pins interfaced to switches
 
     cl.print("<?xml version = \"1.0\" ?>");
     cl.print("<inputs>");
@@ -368,47 +345,10 @@ void XML_response(EthernetClient cl)
     cl.print("%");
     cl.println("</digital3>");
 
-    // read switches
-    for (count = 0; count < 3; count++)
-    {
-        cl.print("<switch>");
-        if (digitalRead(sw_arr[count]))
-        {
-            cl.print("ON");
-        }
-        else
-        {
-            cl.print("OFF");
-        }
-        cl.println("</switch>");
-    }
-    // checkbox LED states
+    // button LED states
     // LED1
     cl.print("<LED>");
     if (LED_state[0])
-    {
-        cl.print("checked");
-    }
-    else
-    {
-        cl.print("unchecked");
-    }
-    cl.println("</LED>");
-    // LED2
-    cl.print("<LED>");
-    if (LED_state[1])
-    {
-        cl.print("checked");
-    }
-    else
-    {
-        cl.print("unchecked");
-    }
-    cl.println("</LED>");
-    // button LED states
-    // LED3
-    cl.print("<LED>");
-    if (LED_state[2])
     {
         cl.print("on");
     }
@@ -417,9 +357,9 @@ void XML_response(EthernetClient cl)
         cl.print("off");
     }
     cl.println("</LED>");
-    // LED4
+    // LED2
     cl.print("<LED>");
-    if (LED_state[3])
+    if (LED_state[1])
     {
         cl.print("on");
     }
@@ -474,4 +414,33 @@ char StrContains(char *str, char *sfind)
     }
 
     return 0;
+}
+
+void ag_modo12h()
+{
+
+    if (millis() > TiempoAhora1 + periodo)
+    {
+        TiempoAhora1 = millis();
+        Serial.println("EJECUTANDO MODO12H");
+        dt = clock.getDateTime();
+        if (dt.minute == 53 || dt.hour == 22 || dt.hour == 23 || dt.hour == 00 || dt.hour == 1 || dt.hour == 2 || dt.hour == 3 || dt.hour == 4 || dt.hour == 5 || dt.hour == 6 || dt.hour == 7 || dt.hour == 8)
+        {
+            //foco1 = lado izquierdo del armario
+            LED_state[0] = 1; // save LED state
+            digitalWrite(8, HIGH);
+            //foco 2 = lado derecho del armario
+            LED_state[1] = 1; // save LED state
+            digitalWrite(9, HIGH);
+        }
+        else
+        {
+            //foco1 = lado izquierdo del armario
+            LED_state[0] = 0; // save LED state
+            digitalWrite(8, LOW);
+            //foco 2 = lado derecho del armario
+            LED_state[1] = 0; // save LED state
+            digitalWrite(9, LOW);
+        }
+    }
 }

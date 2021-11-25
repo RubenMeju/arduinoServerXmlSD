@@ -11,10 +11,12 @@ body {
 }
 header {
   width: 100vw;
+  display: flex;
+  justify-content: space-around;
   background: rgb(52, 191, 247);
 }
 h1 {
-  padding: 10px 20px;
+  /*padding: 10px 20px;*/
   color: whitesmoke;
 }
 .contArmario {

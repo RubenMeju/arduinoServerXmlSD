@@ -2,8 +2,8 @@
 #include <Ethernet.h>
 #include <SD.h>
 #include <DHT.h>
-
-//#include <DS3231.h>
+#include <DS3231.h>
+//
 //#include <LiquidCrystal_I2C.h>
 // size of buffer used to capture HTTP requests
 #define REQ_BUF_SZ 60
@@ -13,8 +13,8 @@ DHT dht2(3, DHT11);
 File HMTL_file;
 
 //LiquidCrystal_I2C lcd(0x27, 16, 2);
-//DS3231 clock;
-//RTCDateTime dt;
+DS3231 clock;
+RTCDateTime dt;
 
 // MAC address from Ethernet shield sticker under board
 byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
@@ -36,7 +36,8 @@ void setup()
     digitalWrite(10, HIGH);
 
     Serial.begin(9600); // for debugging
-                        /// clock.begin();
+    clock.begin();
+    //clock.setDateTime(__DATE__, __TIME__); //--establece la hora, solo la primera vez q se sube el codigo.                  /// clock.begin();
     dht1.begin();
     dht2.begin();
     //inicializar el lcd
@@ -94,7 +95,6 @@ void setup()
 
 void loop()
 {
-
     listenForClients();
 }
 
@@ -318,6 +318,35 @@ void XML_response(EthernetClient cl)
 
     cl.print("<?xml version = \"1.0\" ?>");
     cl.print("<inputs>");
+
+    //envio la hora y la fecha del arduino.
+    dt = clock.getDateTime();
+    cl.print("<relog>");
+    if (dt.hour < 10)
+    {
+        cl.print("0");
+    }
+    cl.print(dt.hour);
+    cl.print(":");
+    if (dt.minute < 10)
+    {
+        cl.print("0");
+    }
+    cl.print(dt.minute);
+    cl.print(":");
+    if (dt.second < 10)
+    {
+        cl.print("0");
+    }
+    cl.print(dt.second);
+
+    cl.print("  Fecha: ");
+    cl.print(dt.day);
+    cl.print("/");
+    cl.print(dt.month);
+    cl.print("/");
+    cl.print(dt.year);
+    cl.println("</relog>");
 
     //AG izquierda dht11 conectado al pin digital 2
     t1 = dht1.readTemperature();

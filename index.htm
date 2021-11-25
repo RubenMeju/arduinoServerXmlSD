@@ -24,6 +24,13 @@
                 console.log(this.responseXML);
                 // XML file received - contains analog values, switch values and LED state
                 //dht11
+                document.getElementById("dt").innerHTML =
+                  this.responseXML.getElementsByTagName(
+                    "relog"
+                  )[0].childNodes[0].nodeValue;
+                
+                
+                //dht11
                 document.getElementById("T1").innerHTML =
                   this.responseXML.getElementsByTagName(
                     "digital2"
@@ -149,6 +156,7 @@
   <body onload="GetArduinoIO()">
     <header>
       <h1>Mejurdino</h1>
+      <h5>Hora: <span id="dt" class="relog">...</span></h5>
     </header>
 
     <!--Armario grande-->

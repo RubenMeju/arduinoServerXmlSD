@@ -10,7 +10,7 @@ body {
 }
 header {
   width: 100vw;
-  background:rgb(52, 191, 247);
+  background: rgb(52, 191, 247);
 }
 h1 {
   padding: 10px 20px;
@@ -32,7 +32,6 @@ h3 {
   color: #dddddd;
 }
 .bordeArmario {
- 
   width: 90vw;
   height: 300px;
   margin: auto;
@@ -49,28 +48,28 @@ h3 {
     -webkit-box-shadow: 6px 5px 22px 13px rgba(44, 44, 44, 0.5);
     box-shadow: 6px 5px 22px 13px rgba(0, 0, 0, 0.5);*/
 }
-.ladosArm{
+.ladosArm {
   width: 45%;
   height: 90%;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+
+  justify-content: center;
   background: rgb(219, 212, 212);
   border: 2px solid black;
 }
-.izq{
-  
+.izq {
   border-top-right-radius: 30%;
   border-bottom-right-radius: 30%;
 }
-.der{
+.der {
   border-top-left-radius: 30%;
   border-bottom-left-radius: 30%;
 }
 .contfoco1,
 .contfoco2,
 .contfoco3 {
- 
   top: 70px;
   width: 80px;
   padding: 10px;

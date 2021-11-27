@@ -280,23 +280,25 @@ void SetLEDs(void)
     if (StrContains(HTTP_req, "MODOAG1=1"))
     {
         MODOAG_state[0] = 1; //el modo 12 horas esta activado
-        EEPROM.write(0, 1);
+        MODOAG_state[1] = 0; // el modo 18 horas desactivado
+       // EEPROM.write(0, 1);
     }
     else if (StrContains(HTTP_req, "MODOAG1=0"))
     {
         MODOAG_state[0] = 0; // el modo 12 horas desactivado
-        EEPROM.write(0, 0);
+      //  EEPROM.write(0, 0);
     }
     // MODO 12 HORAS ARMARIO GRANDE
     if (StrContains(HTTP_req, "MODOAG2=1"))
     {
-        MODOAG_state[1] = 1; //el modo 18 horas esta activado
-        EEPROM.write(0, 2);
+        MODOAG_state[1] = 2; //el modo 18 horas esta activado
+        MODOAG_state[0] = 0; // el modo 12 horas desactivado
+       // EEPROM.write(0, 2);
     }
     else if (StrContains(HTTP_req, "MODOAG2=0"))
     {
         MODOAG_state[1] = 0; // el modo 18 horas desactivado
-        EEPROM.write(0, 0);
+      //  EEPROM.write(0, 0);
     }
 
     // LED 1 (pin 8)
@@ -382,8 +384,8 @@ void XML_response(EthernetClient cl)
 
     // button MODOAG 12 horas armario grande
     cl.print("<MODOAG>");
-    Serial.println("ModoAG_state[0");
-    Serial.println(MODOAG_state[0]);
+   // Serial.println("ModoAG_state[0");
+   // Serial.println(MODOAG_state[0]);
     if (MODOAG_state[0])
     {
         cl.print("on");
@@ -396,8 +398,8 @@ void XML_response(EthernetClient cl)
 
     // button MODOAG 18 horas armario grande
     cl.print("<MODOAG>");
-    Serial.println("ModoAG_state[1");
-    Serial.println(MODOAG_state[1]);
+  //  Serial.println("ModoAG_state[1");
+   // Serial.println(MODOAG_state[1]);
     if (MODOAG_state[1])
     {
         cl.print("on");
@@ -487,7 +489,7 @@ void ag_modo12h()
         TiempoAhora1 = millis();
         Serial.println("EJECUTANDO MODO12H");
         dt = clock.getDateTime();
-        if (dt.minute == 49 || dt.hour == 15 || dt.hour == 23 || dt.hour == 00 || dt.hour == 1 || dt.hour == 2 || dt.hour == 3 || dt.hour == 4 || dt.hour == 5 || dt.hour == 6 || dt.hour == 7 || dt.hour == 8)
+        if (dt.minute == 21 || dt.hour == 22 || dt.hour == 23 || dt.hour == 00 || dt.hour == 1 || dt.hour == 2 || dt.hour == 3 || dt.hour == 4 || dt.hour == 5 || dt.hour == 6 || dt.hour == 7 || dt.hour == 8)
         {
             //foco1 = lado izquierdo del armario
             LED_state[0] = 1; // save LED state
@@ -515,7 +517,7 @@ void ag_modo18h()
         TiempoAhora2 = millis();
         Serial.println("EJECUTANDO MODO18H");
         dt = clock.getDateTime();
-        if (dt.minute == 52 || dt.hour == 20 || dt.hour == 21 || dt.hour == 22 || dt.hour == 23 || dt.hour == 00 || dt.hour == 1 || dt.hour == 2 || dt.hour == 3 || dt.hour == 4 || dt.hour == 5 || dt.hour == 6 || dt.hour == 7 || dt.hour == 8 || dt.hour == 9 || dt.hour == 10 || dt.hour == 11 || dt.hour == 12)
+        if (dt.hour == 19 || dt.hour == 20 || dt.hour == 21 || dt.hour == 22 || dt.hour == 23 || dt.hour == 00 || dt.hour == 1 || dt.hour == 2 || dt.hour == 3 || dt.hour == 4 || dt.hour == 5 || dt.hour == 6 || dt.hour == 7 || dt.hour == 8 || dt.hour == 9 || dt.hour == 10 || dt.hour == 11 || dt.hour == 12)
         {
             //foco1 = lado izquierdo del armario
             LED_state[0] = 1; // save LED state
@@ -545,21 +547,24 @@ void control_AG()
 
         Serial.println("CONTROL AG -  estoy controlando el encendido del armario GRANDE");
 
-        estadoAgModoLuz = EEPROM.read(0);
+       // estadoAgModoLuz = EEPROM.read(0);
         
-        Serial.println("var estadoAgmodoLuz:  ");
-        Serial.println(estadoAgModoLuz);
-        if (estadoAgModoLuz == 1)
+        Serial.println("var MODOAG_STATE[0]:  ");
+        Serial.println(MODOAG_state[0]);
+        Serial.println("var MODOAG_STATE[1]:  ");
+        Serial.println(MODOAG_state[1]);
+       
+        if (MODOAG_state[0] == 1)
         {
             ag_modo12h();
         }
-        else if (estadoAgModoLuz == 2)
+        else if (MODOAG_state[1] == 1)
         {
             ag_modo18h();
         }
         else
         {
-            Serial.println("estoy en el else xq llego estadoAGModoLuz con valor 0");
+            Serial.println("nINGUN MODO SELECIONADO");
             /*
             //foco1 = lado izquierdo del armario
             LED_state[0] = 0; // save LED state

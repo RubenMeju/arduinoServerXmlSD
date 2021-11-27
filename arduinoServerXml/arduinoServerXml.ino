@@ -24,7 +24,7 @@ EthernetServer server(80);       // create a server at port 80
 File webFile;                    // the web page file on the SD card
 char HTTP_req[REQ_BUF_SZ] = {0}; // buffered HTTP request stored as null terminated string
 char req_index = 0;
-boolean MODOAG_state[1] = {0}; // index into HTTP_req buffer
+boolean MODOAG_state[2] = {0}; // index into HTTP_req buffer
 boolean LED_state[2] = {0};    // stores the states of the LEDs
 
 //controla el modo horario o desactivacion del armario grande
@@ -277,14 +277,25 @@ void listenForClients()
 void SetLEDs(void)
 {
     // MODO 12 HORAS ARMARIO GRANDE
-    if (StrContains(HTTP_req, "MODOAG=1"))
+    if (StrContains(HTTP_req, "MODOAG1=1"))
     {
-        MODOAG_state[0] = 1; // save LED state
+        MODOAG_state[0] = 1; //el modo 12 horas esta activado
         EEPROM.write(0, 1);
     }
-    else if (StrContains(HTTP_req, "MODOAG=0"))
+    else if (StrContains(HTTP_req, "MODOAG1=0"))
     {
-        MODOAG_state[0] = 0; // save LED state
+        MODOAG_state[0] = 0; // el modo 12 horas desactivado
+        EEPROM.write(0, 0);
+    }
+    // MODO 12 HORAS ARMARIO GRANDE
+    if (StrContains(HTTP_req, "MODOAG2=1"))
+    {
+        MODOAG_state[1] = 1; //el modo 18 horas esta activado
+        EEPROM.write(0, 2);
+    }
+    else if (StrContains(HTTP_req, "MODOAG2=0"))
+    {
+        MODOAG_state[1] = 0; // el modo 18 horas desactivado
         EEPROM.write(0, 0);
     }
 
@@ -369,11 +380,25 @@ void XML_response(EthernetClient cl)
     cl.print("%");
     cl.println("</digital3>");
 
-    // button MODOAG
+    // button MODOAG 12 horas armario grande
     cl.print("<MODOAG>");
-    
-    
-    if (estadoAgModoLuz == 1)
+    Serial.println("ModoAG_state[0");
+    Serial.println(MODOAG_state[0]);
+    if (MODOAG_state[0])
+    {
+        cl.print("on");
+    }
+    else
+    {
+        cl.print("off");
+    }
+    cl.println("</MODOAG>");
+
+    // button MODOAG 18 horas armario grande
+    cl.print("<MODOAG>");
+    Serial.println("ModoAG_state[1");
+    Serial.println(MODOAG_state[1]);
+    if (MODOAG_state[1])
     {
         cl.print("on");
     }
@@ -462,7 +487,7 @@ void ag_modo12h()
         TiempoAhora1 = millis();
         Serial.println("EJECUTANDO MODO12H");
         dt = clock.getDateTime();
-        if (dt.minute == 14 || dt.hour == 15 || dt.hour == 23 || dt.hour == 00 || dt.hour == 1 || dt.hour == 2 || dt.hour == 3 || dt.hour == 4 || dt.hour == 5 || dt.hour == 6 || dt.hour == 7 || dt.hour == 8)
+        if (dt.minute == 49 || dt.hour == 15 || dt.hour == 23 || dt.hour == 00 || dt.hour == 1 || dt.hour == 2 || dt.hour == 3 || dt.hour == 4 || dt.hour == 5 || dt.hour == 6 || dt.hour == 7 || dt.hour == 8)
         {
             //foco1 = lado izquierdo del armario
             LED_state[0] = 1; // save LED state
@@ -490,7 +515,7 @@ void ag_modo18h()
         TiempoAhora2 = millis();
         Serial.println("EJECUTANDO MODO18H");
         dt = clock.getDateTime();
-        if (dt.hour == 19 || dt.hour == 20 || dt.hour == 21 || dt.hour == 22 || dt.hour == 23 || dt.hour == 00 || dt.hour == 1 || dt.hour == 2 || dt.hour == 3 || dt.hour == 4 || dt.hour == 5 || dt.hour == 6 || dt.hour == 7 || dt.hour == 8 || dt.hour == 9 || dt.hour == 10 || dt.hour == 11 || dt.hour == 12)
+        if (dt.minute == 52 || dt.hour == 20 || dt.hour == 21 || dt.hour == 22 || dt.hour == 23 || dt.hour == 00 || dt.hour == 1 || dt.hour == 2 || dt.hour == 3 || dt.hour == 4 || dt.hour == 5 || dt.hour == 6 || dt.hour == 7 || dt.hour == 8 || dt.hour == 9 || dt.hour == 10 || dt.hour == 11 || dt.hour == 12)
         {
             //foco1 = lado izquierdo del armario
             LED_state[0] = 1; // save LED state
@@ -521,7 +546,9 @@ void control_AG()
         Serial.println("CONTROL AG -  estoy controlando el encendido del armario GRANDE");
 
         estadoAgModoLuz = EEPROM.read(0);
-
+        
+        Serial.println("var estadoAgmodoLuz:  ");
+        Serial.println(estadoAgModoLuz);
         if (estadoAgModoLuz == 1)
         {
             ag_modo12h();

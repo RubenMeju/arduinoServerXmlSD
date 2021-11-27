@@ -7,11 +7,13 @@
     <title>Arduino Ajax I/O</title>
     <link rel="stylesheet" href="css/estilos.css" />
     <script>
-      strMODO12AG = "";
+      strMODOAG1 = "";
+      strMODOAG2 = "";
       strLED1 = "";
       strLED2 = "";
 
-      var MODO12AG_state = 0;
+      var MODOAG1_state = 0;
+      var MODOAG2_state = 0;
       var LED1_state = 0;
       var LED2_state = 0;
       function GetArduinoIO() {
@@ -44,39 +46,74 @@
                 //BOTONES MODO HORARIO
                 /*console.log("que llega del responseXML modo12ag");
                 console.log(
-                  this.responseXML.getElementsByTagName("MODOAG")[0]
+                  this.responseXML.getElementsByTagName("MODOAG1")[0]
                     .childNodes[0]
                 );*/
-                // modo12h ag
+                // ****************************************   modo12h ag
                 if (
                   this.responseXML.getElementsByTagName("MODOAG")[0]
                     .childNodes[0].nodeValue === "on"
                 ) {
                   //quito la clase ON
                   document
-                    .getElementById("btnModoAG")
+                    .getElementById("MODOAG1")
                     .classList.remove("btnOff");
                   //pongo la clase btnon On
-                  document.getElementById("btnModoAG").classList.add("btnOn");
+                  document.getElementById("MODOAG1").classList.add("btnOn");
 
                   //modifico la linea en el dom
-                  document.getElementById("btnModoAG").innerHTML = "Modo 12 ON";
-                  MODOAG_state = 1;
+                  document.getElementById("MODOAG1").innerHTML =
+                    "Modo 12 ON";
+                  MODOAG1_state = 1;
                 } else {
                   //quito la clase de ON
                   document
-                    .getElementById("btnModoAG")
+                    .getElementById("MODOAG1")
                     .classList.remove("btnOn");
                   //pongo la clase btn que es la OFF
-                  document.getElementById("btnModoAG").classList.add("btnOff");
+                  document
+                    .getElementById("MODOAG1")
+                    .classList.add("btnOff");
 
                   //modifico la linea en el dom
-                  document.getElementById("btnModoAG").innerHTML =
+                  document.getElementById("MODOAG1").innerHTML =
                     "Modo 12 OFF";
-                  MODOAG_state = 0;
+                  MODOAG1_state = 0;
                 }
 
-                // FOCO 1
+                // ****************************************   modo18h ag
+                if (
+                  this.responseXML.getElementsByTagName("MODOAG")[1]
+                    .childNodes[0].nodeValue === "on"
+                ) {
+                  //quito la clase ON
+                  document
+                    .getElementById("MODOAG2")
+                    .classList.remove("btnOff");
+                  //pongo la clase btnon On
+                  document.getElementById("MODOAG2").classList.add("btnOn");
+
+                  //modifico la linea en el dom
+                  document.getElementById("MODOAG2").innerHTML =
+                    "Modo 18 ON";
+                  MODOAG2_state = 1;
+                } else {
+                  //quito la clase de ON
+                  document
+                    .getElementById("MODOAG2")
+                    .classList.remove("btnOn");
+                  //pongo la clase btn que es la OFF
+                  document
+                    .getElementById("MODOAG2")
+                    .classList.add("btnOff");
+
+                  //modifico la linea en el dom
+                  document.getElementById("MODOAG2").innerHTML =
+                    "Modo 18 OFF";
+                  MODOAG2_state = 0;
+                }
+
+                // ****************************************    FOCO 1
                 /*
                 console.log("aqui el response de foco1");
                 console.log(
@@ -116,7 +153,7 @@
                   LED1_state = 0;
                 }
 
-                // FOCO 2
+                // ****************************************    FOCO 2
                 if (
                   this.responseXML.getElementsByTagName("LED")[1].childNodes[0]
                     .nodeValue === "on"
@@ -152,23 +189,42 @@
         // send HTTP GET request with LEDs to switch on/off if any
         request.open(
           "GET",
-          "ajax_inputs" + strMODO12AG + strLED1 + strLED2 + nocache,
+          "ajax_inputs" + strMODOAG1 + strMODOAG2 + strLED1 + strLED2 + nocache,
           true
         );
         request.send(null);
         setTimeout("GetArduinoIO()", 1000);
-        strMODO12AG = "";
+        strMODOAG1 = "";
+        strMODOAG2 = "";
         strLED1 = "";
         strLED2 = "";
       }
 
+      //modo horario armario grande
+      ///12 horas armario grande
       function modo12ag() {
-        if (MODO12AG_state === 1) {
-          MODO12AG_state = 0;
-          strMODO12AG = "&MODOAG=0";
+        console.log("Entro a la funcion modo12ag aun no entro al if");
+        if (MODOAG1_state === 1) {
+          console.log("dentro del if de modo12ag");
+          MODOAG1_state = 0;
+          strMODOAG1 = "&MODOAG1=0";
         } else {
-          MODO12AG_state = 1;
-          strMODO12AG = "&MODOAG=1";
+          console.log("dentro del else de modo12ag");
+          MODOAG1_state = 1;
+          strMODOAG1 = "&MODOAG1=1";
+        }
+      }
+      //18h armario grande
+      function modo18ag() {
+        console.log("Entro a la funcion modo18ag aun no entro al if");
+        if (MODOAG2_state === 1) {
+          console.log("dentro del if de modo18ag");
+          MODOAG2_state = 0;
+          strMODOAG2 = "&MODOAG2=0";
+        } else {
+          console.log("dentro del else de modo18ag");
+          MODOAG2_state = 1;
+          strMODOAG2 = "&MODOAG2=1";
         }
       }
 
@@ -287,13 +343,23 @@
 
       <div class="opcionesAG">
         <section class="automatico">
+          <!--boton para encender o apagar modo 12 h armario grande-->
           <button
             type="button"
-            id="btnModoAG"
+            id="MODOAG1"
             class="btnOff"
             onclick="modo12ag()"
           >
             Modo 12 init
+          </button>
+          <!--boton para encender o apagar modo 18 h armario grande-->
+          <button
+            type="button"
+            id="MODOAG2"
+            class="btnOff"
+            onclick="modo18ag()"
+          >
+            Modo 18 init
           </button>
         </section>
 

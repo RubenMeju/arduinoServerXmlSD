@@ -7,9 +7,11 @@
     <title>Arduino Ajax I/O</title>
     <link rel="stylesheet" href="css/estilos.css" />
     <script>
+      strMODO12AG = "";
       strLED1 = "";
       strLED2 = "";
 
+      var MODO12AG_state = 0;
       var LED1_state = 0;
       var LED2_state = 0;
       function GetArduinoIO() {
@@ -39,13 +41,62 @@
                     "digital3"
                   )[0].childNodes[0].nodeValue;
 
+                //BOTONES MODO HORARIO
+                /*console.log("que llega del responseXML modo12ag");
+                console.log(
+                  this.responseXML.getElementsByTagName("MODOAG")[0]
+                    .childNodes[0]
+                );*/
+                // modo12h ag
+                if (
+                  this.responseXML.getElementsByTagName("MODOAG")[0]
+                    .childNodes[0].nodeValue === "on"
+                ) {
+                  //quito la clase ON
+                  document
+                    .getElementById("btnModoAG")
+                    .classList.remove("btnOff");
+                  //pongo la clase btnon On
+                  document.getElementById("btnModoAG").classList.add("btnOn");
+
+                  //modifico la linea en el dom
+                  document.getElementById("btnModoAG").innerHTML = "Modo 12 ON";
+                  MODOAG_state = 1;
+                } else {
+                  //quito la clase de ON
+                  document
+                    .getElementById("btnModoAG")
+                    .classList.remove("btnOn");
+                  //pongo la clase btn que es la OFF
+                  document.getElementById("btnModoAG").classList.add("btnOff");
+
+                  //modifico la linea en el dom
+                  document.getElementById("btnModoAG").innerHTML =
+                    "Modo 12 OFF";
+                  MODOAG_state = 0;
+                }
+
                 // FOCO 1
+                /*
+                console.log("aqui el response de foco1");
+                console.log(
+                  this.responseXML.getElementsByTagName("LED")[0].childNodes[0]
+                );
+                */
+
                 if (
                   this.responseXML.getElementsByTagName("LED")[0].childNodes[0]
                     .nodeValue === "on"
                 ) {
                   document.getElementById("foco1-1").classList.add("svgon-1");
                   document.getElementById("foco1-1").classList.remove("svg-1");
+
+                  //pongo clase a boton
+                  //pongo la clase btnon On
+                  document.getElementById("LED1").classList.add("btnOn");
+                  //quito la clase Off
+                  document.getElementById("LED1").classList.remove("btnOff");
+
                   document.getElementById("LED1").innerHTML =
                     "FOCO 1 esta encendido (D8)";
                   LED1_state = 1;
@@ -54,10 +105,17 @@
                   document
                     .getElementById("foco1-1")
                     .classList.remove("svgon-1");
+
+                  //quito la clase ON
+                  document.getElementById("LED1").classList.remove("btnOn");
+                  //pongo la clase btnon OFF
+                  document.getElementById("LED1").classList.add("btnOff");
+
                   document.getElementById("LED1").innerHTML =
                     "FOCO 1 esta apagado (D8)";
                   LED1_state = 0;
                 }
+
                 // FOCO 2
                 if (
                   this.responseXML.getElementsByTagName("LED")[1].childNodes[0]
@@ -65,6 +123,12 @@
                 ) {
                   document.getElementById("foco2-1").classList.add("svgon-1");
                   document.getElementById("foco2-1").classList.remove("svg-1");
+                  //pongo clase a boton
+                  //pongo la clase btnon On
+                  document.getElementById("LED2").classList.add("btnOn");
+                  //quito la clase Off
+                  document.getElementById("LED2").classList.remove("btnOff");
+
                   document.getElementById("LED2").innerHTML =
                     "FOCO 2 esta Encendido (D9)";
                   LED2_state = 1;
@@ -73,6 +137,10 @@
                   document
                     .getElementById("foco2-1")
                     .classList.remove("svgon-1");
+                  //quito la clase ON
+                  document.getElementById("LED2").classList.remove("btnOn");
+                  //pongo la clase btnon OFF
+                  document.getElementById("LED2").classList.add("btnOff");
                   document.getElementById("LED2").innerHTML =
                     "FOCO 2 esta Apagado (D9)";
                   LED2_state = 0;
@@ -82,13 +150,27 @@
           }
         };
         // send HTTP GET request with LEDs to switch on/off if any
-        request.open("GET", "ajax_inputs" + strLED1 + strLED2 + nocache, true);
+        request.open(
+          "GET",
+          "ajax_inputs" + strMODO12AG + strLED1 + strLED2 + nocache,
+          true
+        );
         request.send(null);
         setTimeout("GetArduinoIO()", 1000);
+        strMODO12AG = "";
         strLED1 = "";
         strLED2 = "";
       }
-      //
+
+      function modo12ag() {
+        if (MODO12AG_state === 1) {
+          MODO12AG_state = 0;
+          strMODO12AG = "&MODOAG=0";
+        } else {
+          MODO12AG_state = 1;
+          strMODO12AG = "&MODOAG=1";
+        }
+      }
 
       function GetButton1() {
         if (LED1_state === 1) {
@@ -204,13 +286,26 @@
       </div>
 
       <div class="opcionesAG">
-        <button type="button" id="LED1" onclick="GetButton1()">
-          FOCO 1 esta Apagado (D8)
-        </button>
+        <section class="automatico">
+          <button
+            type="button"
+            id="btnModoAG"
+            class="btnOff"
+            onclick="modo12ag()"
+          >
+            Modo 12 init
+          </button>
+        </section>
 
-        <button type="button" id="LED2" onclick="GetButton2()">
-          FOCO 4 esta Apagado (D9)
-        </button>
+        <section class="manual">
+          <button type="button" id="LED1" class="btnOff" onclick="GetButton1()">
+            FOCO 1 esta Apagado (D8)
+          </button>
+
+          <button type="button" id="LED2" class="btnOff" onclick="GetButton2()">
+            FOCO 4 esta Apagado (D9)
+          </button>
+        </section>
       </div>
     </div>
   </body>

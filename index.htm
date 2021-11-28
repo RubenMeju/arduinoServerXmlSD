@@ -55,29 +55,21 @@
                     .childNodes[0].nodeValue === "on"
                 ) {
                   //quito la clase ON
-                  document
-                    .getElementById("MODOAG1")
-                    .classList.remove("btnOff");
+                  document.getElementById("MODOAG1").classList.remove("btnOff");
                   //pongo la clase btnon On
                   document.getElementById("MODOAG1").classList.add("btnOn");
 
                   //modifico la linea en el dom
-                  document.getElementById("MODOAG1").innerHTML =
-                    "Modo 12 ON";
+                  document.getElementById("MODOAG1").innerHTML = "Modo 12 ON";
                   MODOAG1_state = 1;
                 } else {
                   //quito la clase de ON
-                  document
-                    .getElementById("MODOAG1")
-                    .classList.remove("btnOn");
+                  document.getElementById("MODOAG1").classList.remove("btnOn");
                   //pongo la clase btn que es la OFF
-                  document
-                    .getElementById("MODOAG1")
-                    .classList.add("btnOff");
+                  document.getElementById("MODOAG1").classList.add("btnOff");
 
                   //modifico la linea en el dom
-                  document.getElementById("MODOAG1").innerHTML =
-                    "Modo 12 OFF";
+                  document.getElementById("MODOAG1").innerHTML = "Modo 12 OFF";
                   MODOAG1_state = 0;
                 }
 
@@ -87,29 +79,21 @@
                     .childNodes[0].nodeValue === "on"
                 ) {
                   //quito la clase ON
-                  document
-                    .getElementById("MODOAG2")
-                    .classList.remove("btnOff");
+                  document.getElementById("MODOAG2").classList.remove("btnOff");
                   //pongo la clase btnon On
                   document.getElementById("MODOAG2").classList.add("btnOn");
 
                   //modifico la linea en el dom
-                  document.getElementById("MODOAG2").innerHTML =
-                    "Modo 18 ON";
+                  document.getElementById("MODOAG2").innerHTML = "Modo 18 ON";
                   MODOAG2_state = 1;
                 } else {
                   //quito la clase de ON
-                  document
-                    .getElementById("MODOAG2")
-                    .classList.remove("btnOn");
+                  document.getElementById("MODOAG2").classList.remove("btnOn");
                   //pongo la clase btn que es la OFF
-                  document
-                    .getElementById("MODOAG2")
-                    .classList.add("btnOff");
+                  document.getElementById("MODOAG2").classList.add("btnOff");
 
                   //modifico la linea en el dom
-                  document.getElementById("MODOAG2").innerHTML =
-                    "Modo 18 OFF";
+                  document.getElementById("MODOAG2").innerHTML = "Modo 18 OFF";
                   MODOAG2_state = 0;
                 }
 
@@ -135,7 +119,7 @@
                   document.getElementById("LED1").classList.remove("btnOff");
 
                   document.getElementById("LED1").innerHTML =
-                    "FOCO 1 esta encendido (D8)";
+                    "FOCO 1 ON (D8)";
                   LED1_state = 1;
                 } else {
                   document.getElementById("foco1-1").classList.add("svg-1");
@@ -149,7 +133,7 @@
                   document.getElementById("LED1").classList.add("btnOff");
 
                   document.getElementById("LED1").innerHTML =
-                    "FOCO 1 esta apagado (D8)";
+                    "FOCO 1 OFF (D8)";
                   LED1_state = 0;
                 }
 
@@ -167,7 +151,7 @@
                   document.getElementById("LED2").classList.remove("btnOff");
 
                   document.getElementById("LED2").innerHTML =
-                    "FOCO 2 esta Encendido (D9)";
+                    "FOCO 2 ON (D9)";
                   LED2_state = 1;
                 } else {
                   document.getElementById("foco2-1").classList.add("svg-1");
@@ -179,7 +163,7 @@
                   //pongo la clase btnon OFF
                   document.getElementById("LED2").classList.add("btnOff");
                   document.getElementById("LED2").innerHTML =
-                    "FOCO 2 esta Apagado (D9)";
+                    "FOCO 2 OFF(D9)";
                   LED2_state = 0;
                 }
               }
@@ -350,7 +334,7 @@
             class="btnOff"
             onclick="modo12ag()"
           >
-            Modo 12 init
+            Modo 12h
           </button>
           <!--boton para encender o apagar modo 18 h armario grande-->
           <button
@@ -359,17 +343,17 @@
             class="btnOff"
             onclick="modo18ag()"
           >
-            Modo 18 init
+            Modo 18h
           </button>
         </section>
 
         <section class="manual">
           <button type="button" id="LED1" class="btnOff" onclick="GetButton1()">
-            FOCO 1 esta Apagado (D8)
+            FOCO 1 OFF (D8)
           </button>
 
           <button type="button" id="LED2" class="btnOff" onclick="GetButton2()">
-            FOCO 4 esta Apagado (D9)
+            FOCO 2 OFF (D9)
           </button>
         </section>
       </div>

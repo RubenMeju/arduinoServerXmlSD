@@ -27,7 +27,7 @@ char req_index = 0;
 boolean MODOAG_state[2] = {0}; // index into HTTP_req buffer
 boolean LED_state[2] = {0};    // stores the states of the LEDs
 
-int controlManual = 0;
+boolean AUTOMANUAL_state[1] = {0};
 /*
 //controla el modo horario o desactivacion del armario grande
 int estadoAgModoLuz = EEPROM.read(0);
@@ -109,21 +109,26 @@ void setup()
 
 void loop()
 {
-    //si alguno de los modos 12 y 18 esta ON activa la funcion de control del armario grande
-    if (MODOAG_state[0] == 1 || MODOAG_state[1])
+    //si es igual a 1 activamos los modos horarios
+    if (AUTOMANUAL_state[0] == 1)
     {
-        control_AG();
-    }
-    else
-    {
-        Serial.println("nINGUN MODO SELECIONADO");
+        Serial.println("dentro de if de automanualState == 1");
+        //si alguno de los modos 12 y 18 esta ON activa la funcion de control del armario grande
+        if (MODOAG_state[0] == 1 || MODOAG_state[1])
+        {
+            control_AG();
+        }
+        else
+        {
+            Serial.println("nINGUN MODO SELECIONADO");
 
-        //foco1 = lado izquierdo del armario
-        LED_state[0] = 0; // save LED state
-        digitalWrite(8, LOW);
-        //foco 2 = lado derecho del armario
-        LED_state[1] = 0; // save LED state
-        digitalWrite(9, LOW);
+            //foco1 = lado izquierdo del armario
+            LED_state[0] = 0; // save LED state
+            digitalWrite(8, LOW);
+            //foco 2 = lado derecho del armario
+            LED_state[1] = 0; // save LED state
+            digitalWrite(9, LOW);
+        }
     }
 
     listenForClients();
@@ -262,6 +267,18 @@ void listenForClients()
 // also saves the state of the LEDs
 void SetLEDs(void)
 {
+    // MODO AUTOMATICO O MANUAL
+    if (StrContains(HTTP_req, "AUTOMANUAL1=1"))
+    {
+        Serial.println("dentro d if StrContains automanual1=1");
+        AUTOMANUAL_state[0] = 1;
+    }
+    else if (StrContains(HTTP_req, "AUTOMANUAL1=0"))
+    {
+        Serial.println("dentro d else StrContains automanual1=0");
+        AUTOMANUAL_state[0] = 0;
+    }
+
     // MODO 12 HORAS ARMARIO GRANDE
     if (StrContains(HTTP_req, "MODOAG1=1"))
     {
@@ -367,6 +384,20 @@ void XML_response(EthernetClient cl)
     cl.print(h2);
     cl.print("%");
     cl.println("</digital3>");
+
+    // button MODO AUTO O MANUAL armario grande
+    cl.print("<AUTOMANUAL>");
+    Serial.println("automanual_state[0]");
+    Serial.println(AUTOMANUAL_state[0]);
+    if (AUTOMANUAL_state[0])
+    {
+        cl.print("on");
+    }
+    else
+    {
+        cl.print("off");
+    }
+    cl.println("</AUTOMANUAL>");
 
     // button MODOAG 12 horas armario grande
     cl.print("<MODOAG>");

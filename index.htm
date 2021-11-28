@@ -7,11 +7,13 @@
     <title>Arduino Ajax I/O</title>
     <link rel="stylesheet" href="css/estilos.css" />
     <script>
+      strAUTOMANUAL1 = "";
       strMODOAG1 = "";
       strMODOAG2 = "";
       strLED1 = "";
       strLED2 = "";
 
+      var AUTOMANUAL1_state = 0;
       var MODOAG1_state = 0;
       var MODOAG2_state = 0;
       var LED1_state = 0;
@@ -43,7 +45,44 @@
                     "digital3"
                   )[0].childNodes[0].nodeValue;
 
-                //BOTONES MODO HORARIO
+                //-----------------boton auto manual - para elegir entre modos o foco a foco
+
+                console.log("que llega del responseXML automanual");
+                console.log(
+                  this.responseXML.getElementsByTagName("AUTOMANUAL")[0]
+                    .childNodes[0]
+                );
+
+                if (
+                  this.responseXML.getElementsByTagName("AUTOMANUAL")[0]
+                    .childNodes[0].nodeValue === "on"
+                ) {
+                  //quito la clase ON
+                  document
+                    .getElementById("AUTOMANUAL1")
+                    .classList.remove("btnOff");
+                  //pongo la clase btnon On
+                  document.getElementById("AUTOMANUAL1").classList.add("btnOn");
+
+                  //modifico la linea en el dom
+                  document.getElementById("AUTOMANUAL1").innerHTML = "ON";
+                  AUTOMANUAL1_state = 1;
+                } else {
+                  //quito la clase de ON
+                  document
+                    .getElementById("AUTOMANUAL1")
+                    .classList.remove("btnOn");
+                  //pongo la clase btn que es la OFF
+                  document
+                    .getElementById("AUTOMANUAL1")
+                    .classList.add("btnOff");
+
+                  //modifico la linea en el dom
+                  document.getElementById("AUTOMANUAL1").innerHTML = "OFF";
+                  AUTOMANUAL1_state = 0;
+                }
+
+                //----------------------------------BOTONES MODO HORARIO
                 /*console.log("que llega del responseXML modo12ag");
                 console.log(
                   this.responseXML.getElementsByTagName("MODOAG1")[0]
@@ -118,8 +157,7 @@
                   //quito la clase Off
                   document.getElementById("LED1").classList.remove("btnOff");
 
-                  document.getElementById("LED1").innerHTML =
-                    "FOCO 1 ON (D8)";
+                  document.getElementById("LED1").innerHTML = "FOCO 1 ON (D8)";
                   LED1_state = 1;
                 } else {
                   document.getElementById("foco1-1").classList.add("svg-1");
@@ -132,8 +170,7 @@
                   //pongo la clase btnon OFF
                   document.getElementById("LED1").classList.add("btnOff");
 
-                  document.getElementById("LED1").innerHTML =
-                    "FOCO 1 OFF (D8)";
+                  document.getElementById("LED1").innerHTML = "FOCO 1 OFF (D8)";
                   LED1_state = 0;
                 }
 
@@ -150,8 +187,7 @@
                   //quito la clase Off
                   document.getElementById("LED2").classList.remove("btnOff");
 
-                  document.getElementById("LED2").innerHTML =
-                    "FOCO 2 ON (D9)";
+                  document.getElementById("LED2").innerHTML = "FOCO 2 ON (D9)";
                   LED2_state = 1;
                 } else {
                   document.getElementById("foco2-1").classList.add("svg-1");
@@ -162,8 +198,7 @@
                   document.getElementById("LED2").classList.remove("btnOn");
                   //pongo la clase btnon OFF
                   document.getElementById("LED2").classList.add("btnOff");
-                  document.getElementById("LED2").innerHTML =
-                    "FOCO 2 OFF(D9)";
+                  document.getElementById("LED2").innerHTML = "FOCO 2 OFF(D9)";
                   LED2_state = 0;
                 }
               }
@@ -173,15 +208,37 @@
         // send HTTP GET request with LEDs to switch on/off if any
         request.open(
           "GET",
-          "ajax_inputs" + strMODOAG1 + strMODOAG2 + strLED1 + strLED2 + nocache,
+          "ajax_inputs" +
+            strAUTOMANUAL1 +
+            strMODOAG1 +
+            strMODOAG2 +
+            strLED1 +
+            strLED2 +
+            nocache,
           true
         );
         request.send(null);
         setTimeout("GetArduinoIO()", 1000);
+        strAUTOMANUAL1 = "";
         strMODOAG1 = "";
         strMODOAG2 = "";
         strLED1 = "";
         strLED2 = "";
+      }
+      //MODO AUTOMATICO O MANUAL
+      function modoAutoManual() {
+        console.log("Entro a la funcion modo automanual aun no entro al if");
+        console.log("valor de automanual1_State: ");
+        console.log(AUTOMANUAL1_state);
+        if (AUTOMANUAL1_state === 1) {
+          console.log("dentro del if de modoautomanual");
+          AUTOMANUAL1_state = 0;
+          strAUTOMANUAL1 = "&AUTOMANUAL1=0";
+        } else {
+          console.log("dentro del else de modo automanual");
+          AUTOMANUAL1_state = 1;
+          strAUTOMANUAL1 = "&AUTOMANUAL1=1";
+        }
       }
 
       //modo horario armario grande
@@ -326,6 +383,19 @@
       </div>
 
       <div class="opcionesAG">
+        <section class="autoManual">
+          <!--boton para encender o apagar modo auto o manual armario grande-->
+          <button
+            type="button"
+            id="AUTOMANUAL1"
+            class="btnOff"
+            onclick="modoAutoManual()"
+          >
+            Modo automanual
+          </button>
+        </section>
+
+
         <section class="automatico">
           <!--boton para encender o apagar modo 12 h armario grande-->
           <button

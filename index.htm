@@ -65,7 +65,8 @@
                   document.getElementById("AUTOMANUAL1").classList.add("btnOn");
 
                   //modifico la linea en el dom
-                  document.getElementById("AUTOMANUAL1").innerHTML = "ON";
+                  document.getElementById("AUTOMANUAL1").innerHTML =
+                    "AUTOMATICO";
                   AUTOMANUAL1_state = 1;
                 } else {
                   //quito la clase de ON
@@ -78,7 +79,7 @@
                     .classList.add("btnOff");
 
                   //modifico la linea en el dom
-                  document.getElementById("AUTOMANUAL1").innerHTML = "OFF";
+                  document.getElementById("AUTOMANUAL1").innerHTML = "MANUAL";
                   AUTOMANUAL1_state = 0;
                 }
 
@@ -234,6 +235,11 @@
           console.log("dentro del if de modoautomanual");
           AUTOMANUAL1_state = 0;
           strAUTOMANUAL1 = "&AUTOMANUAL1=0";
+          //si el modo esta en manual desactivo los botones de modo
+          MODOAG1_state = 0;
+          strMODOAG1 = "&MODOAG1=0";
+          MODOAG2_state = 0;
+          strMODOAG2 = "&MODOAG2=0";
         } else {
           console.log("dentro del else de modo automanual");
           AUTOMANUAL1_state = 1;
@@ -244,28 +250,36 @@
       //modo horario armario grande
       ///12 horas armario grande
       function modo12ag() {
-        console.log("Entro a la funcion modo12ag aun no entro al if");
-        if (MODOAG1_state === 1) {
-          console.log("dentro del if de modo12ag");
-          MODOAG1_state = 0;
-          strMODOAG1 = "&MODOAG1=0";
+        if (AUTOMANUAL1_state == 1) {
+          console.log("Entro a la funcion modo12ag aun no entro al if");
+          if (MODOAG1_state === 1) {
+            console.log("dentro del if de modo12ag");
+            MODOAG1_state = 0;
+            strMODOAG1 = "&MODOAG1=0";
+          } else {
+            console.log("dentro del else de modo12ag");
+            MODOAG1_state = 1;
+            strMODOAG1 = "&MODOAG1=1";
+          }
         } else {
-          console.log("dentro del else de modo12ag");
-          MODOAG1_state = 1;
-          strMODOAG1 = "&MODOAG1=1";
+          console.log("El modo automatico esta desactivado");
         }
       }
       //18h armario grande
       function modo18ag() {
-        console.log("Entro a la funcion modo18ag aun no entro al if");
-        if (MODOAG2_state === 1) {
-          console.log("dentro del if de modo18ag");
-          MODOAG2_state = 0;
-          strMODOAG2 = "&MODOAG2=0";
+        if (AUTOMANUAL1_state == 1) {
+          console.log("Entro a la funcion modo18ag aun no entro al if");
+          if (MODOAG2_state === 1) {
+            console.log("dentro del if de modo18ag");
+            MODOAG2_state = 0;
+            strMODOAG2 = "&MODOAG2=0";
+          } else {
+            console.log("dentro del else de modo18ag");
+            MODOAG2_state = 1;
+            strMODOAG2 = "&MODOAG2=1";
+          }
         } else {
-          console.log("dentro del else de modo18ag");
-          MODOAG2_state = 1;
-          strMODOAG2 = "&MODOAG2=1";
+          console.log("El modo automatico esta desactivado");
         }
       }
 
@@ -394,7 +408,6 @@
             Modo automanual
           </button>
         </section>
-
 
         <section class="automatico">
           <!--boton para encender o apagar modo 12 h armario grande-->

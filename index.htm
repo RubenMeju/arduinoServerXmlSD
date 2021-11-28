@@ -67,6 +67,9 @@
                   //modifico la linea en el dom
                   document.getElementById("AUTOMANUAL1").innerHTML =
                     "AUTOMATICO";
+                  //paso el msg modo actual automatico
+                  document.getElementById("estadoAG").innerHTML =
+                    "MODO AUTOMATICO ACTIVADO!!!";
                   AUTOMANUAL1_state = 1;
                 } else {
                   //quito la clase de ON
@@ -80,6 +83,9 @@
 
                   //modifico la linea en el dom
                   document.getElementById("AUTOMANUAL1").innerHTML = "MANUAL";
+                  //paso el msg modo actual MANUAL
+                  document.getElementById("estadoAG").innerHTML =
+                    "MODO MANUAL ACTIVADO!!!";
                   AUTOMANUAL1_state = 0;
                 }
 
@@ -284,21 +290,29 @@
       }
 
       function GetButton1() {
-        if (LED1_state === 1) {
-          LED1_state = 0;
-          strLED1 = "&LED1=0";
+        if (AUTOMANUAL1_state == 0) {
+          if (LED1_state === 1) {
+            LED1_state = 0;
+            strLED1 = "&LED1=0";
+          } else {
+            LED1_state = 1;
+            strLED1 = "&LED1=1";
+          }
         } else {
-          LED1_state = 1;
-          strLED1 = "&LED1=1";
+          console.log("El modo manual esta desactivado");
         }
       }
       function GetButton2() {
-        if (LED2_state === 1) {
-          LED2_state = 0;
-          strLED2 = "&LED2=0";
+        if (AUTOMANUAL1_state == 0) {
+          if (LED2_state === 1) {
+            LED2_state = 0;
+            strLED2 = "&LED2=0";
+          } else {
+            LED2_state = 1;
+            strLED2 = "&LED2=1";
+          }
         } else {
-          LED2_state = 1;
-          strLED2 = "&LED2=1";
+          console.log("El modo manual esta desactivado");
         }
       }
     </script>
@@ -352,7 +366,7 @@
               </g>
             </svg>
           </div>
-          <h5>T: <span id="T1" class="digital2">...</span></h5>
+          <h4>T: <span id="T1" class="digital2">...</span></h4>
         </div>
 
         <div class="ladosArm der">
@@ -392,10 +406,13 @@
               </g>
             </svg>
           </div>
-          <h5>T: <span id="T2" class="digital3">...</span></h5>
+          <h4>T: <span id="T2" class="digital3">...</span></h4>
         </div>
       </div>
 
+      <div class="estadoAG">
+        <p id="estadoAG">Modo manual</p>
+      </div>
       <div class="opcionesAG">
         <section class="autoManual">
           <!--boton para encender o apagar modo auto o manual armario grande-->

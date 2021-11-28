@@ -534,7 +534,7 @@ void ag_modo18h()
         TiempoAhora2 = millis();
         Serial.println("EJECUTANDO MODO18H");
         dt = clock.getDateTime();
-        if (dt.hour == 19 || dt.hour == 20 || dt.hour == 21 || dt.hour == 22 || dt.hour == 23 || dt.hour == 00 || dt.hour == 1 || dt.hour == 2 || dt.hour == 3 || dt.hour == 4 || dt.hour == 5 || dt.hour == 6 || dt.hour == 7 || dt.hour == 8 || dt.hour == 9 || dt.hour == 10 || dt.hour == 11 || dt.hour == 12)
+        if (dt.minute == 33 || dt.hour == 20 || dt.hour == 21 || dt.hour == 22 || dt.hour == 23 || dt.hour == 00 || dt.hour == 1 || dt.hour == 2 || dt.hour == 3 || dt.hour == 4 || dt.hour == 5 || dt.hour == 6 || dt.hour == 7 || dt.hour == 8 || dt.hour == 9 || dt.hour == 10 || dt.hour == 11 || dt.hour == 12)
         {
             //foco1 = lado izquierdo del armario
             LED_state[0] = 1; // save LED state

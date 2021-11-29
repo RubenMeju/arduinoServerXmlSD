@@ -98,6 +98,17 @@ h3 {
 .imgFoco {
   width: 50px;
 }
+
+.estadoAG{
+  width: 90%;
+  margin: auto;
+  margin-top: 20px;
+  background: rgba(255, 255, 255, 0.5);
+}
+.msgAG{
+  color: rgb(182, 26, 26);
+  
+}
 .opcionesAG {
   width: 100%;
 }

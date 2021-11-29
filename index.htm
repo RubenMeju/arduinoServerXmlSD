@@ -68,7 +68,7 @@
                   document.getElementById("AUTOMANUAL1").innerHTML =
                     "AUTOMATICO";
                   //paso el msg modo actual automatico
-                  document.getElementById("estadoAG").innerHTML =
+                  document.getElementById("msgAG").innerHTML =
                     "MODO AUTOMATICO ACTIVADO!!!";
                   AUTOMANUAL1_state = 1;
                 } else {
@@ -84,7 +84,7 @@
                   //modifico la linea en el dom
                   document.getElementById("AUTOMANUAL1").innerHTML = "MANUAL";
                   //paso el msg modo actual MANUAL
-                  document.getElementById("estadoAG").innerHTML =
+                  document.getElementById("msgAG").innerHTML =
                     "MODO MANUAL ACTIVADO!!!";
                   AUTOMANUAL1_state = 0;
                 }
@@ -269,6 +269,8 @@
           }
         } else {
           console.log("El modo automatico esta desactivado");
+          document.getElementById("msgAG").innerHTML =
+                    "El modo automatico esta desactivado!!!";
         }
       }
       //18h armario grande
@@ -286,6 +288,8 @@
           }
         } else {
           console.log("El modo automatico esta desactivado");
+          document.getElementById("msgAG").innerHTML =
+                    "El modo automatico esta desactivado!!!";
         }
       }
 
@@ -300,6 +304,8 @@
           }
         } else {
           console.log("El modo manual esta desactivado");
+          document.getElementById("msgAG").innerHTML =
+                    "El modo manual esta desactivado!!!";
         }
       }
       function GetButton2() {
@@ -313,6 +319,8 @@
           }
         } else {
           console.log("El modo manual esta desactivado");
+          document.getElementById("msgAG").innerHTML =
+                    "El modo manual esta desactivado!!!";
         }
       }
     </script>
@@ -411,7 +419,7 @@
       </div>
 
       <div class="estadoAG">
-        <p id="estadoAG">Modo manual</p>
+        <h3 id="msgAG" class="msgAG">Modo manual</h3>
       </div>
       <div class="opcionesAG">
         <section class="autoManual">

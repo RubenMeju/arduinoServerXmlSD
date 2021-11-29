@@ -388,24 +388,49 @@ void XML_response(EthernetClient cl)
     cl.println("</relog>");
 
     //AG izquierda dht11 conectado al pin digital 2
-    t1 = dht1.readTemperature();
-    h1 = dht1.readHumidity();
-    cl.print("<digital2>");
-    cl.print(t1);
-    cl.print("°C - H: ");
-    cl.print(h1);
-    cl.print("%");
-    cl.println("</digital2>");
+    if (isnan(dht1.readTemperature()))
+    {
+        Serial.println("el dht1 no esta conectado o falla");
+        cl.print("<digital2>");
+        cl.print("dht1 no conectado");
 
+        cl.println("</digital2>");
+    }
+    else
+    {
+
+        Serial.println("Estoy en el if de sensor conectado");
+        t1 = dht1.readTemperature();
+        h1 = dht1.readHumidity();
+        cl.print("<digital2>");
+        cl.print(t1);
+        cl.print("°C - H: ");
+        cl.print(h1);
+        cl.print("%");
+        cl.println("</digital2>");
+    }
     //AG derecha dht11 conectado al pin digital 3
-    t2 = dht2.readTemperature();
-    h2 = dht2.readHumidity();
-    cl.print("<digital3>");
-    cl.print(t2);
-    cl.print("°C - H: ");
-    cl.print(h2);
-    cl.print("%");
-    cl.println("</digital3>");
+    if (isnan(dht2.readTemperature()))
+    {
+        Serial.println("el dht2 no esta conectado o falla");
+        cl.print("<digital3>");
+        cl.print("dht1 no conectado");
+
+        cl.println("</digital3>");
+    }
+    else
+    {
+
+        Serial.println("Estoy en el if de sensor conectado");
+        t2 = dht2.readTemperature();
+        h2 = dht2.readHumidity();
+        cl.print("<digital3>");
+        cl.print(t2);
+        cl.print("°C - H: ");
+        cl.print(h2);
+        cl.print("%");
+        cl.println("</digital3>");
+    }
 
     // button MODO AUTO O MANUAL armario grande
     cl.print("<AUTOMANUAL>");

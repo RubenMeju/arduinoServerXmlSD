@@ -95,17 +95,20 @@ h3 {
 .contfoco2 {
   right: 60px;
 }
-.imgFoco {
-  width: 50px;
-}
 
+h4{
+  margin-top: 20px;
+}
 .estadoAG{
   width: 90%;
   margin: auto;
   margin-top: 20px;
   background: rgba(255, 255, 255, 0.5);
 }
-.msgAG{
+.msgOk{
+  color: rgb(121, 202, 0);
+}
+.msgError{
   color: rgb(182, 26, 26);
   
 }

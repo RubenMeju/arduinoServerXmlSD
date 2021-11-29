@@ -67,6 +67,11 @@
                   //modifico la linea en el dom
                   document.getElementById("AUTOMANUAL1").innerHTML =
                     "AUTOMATICO";
+
+                  //quito la clase msgError
+                  document.getElementById("msgAG").classList.remove("msgError");
+                  //pongo la clase msgOk
+                  document.getElementById("msgAG").classList.add("msgOk");
                   //paso el msg modo actual automatico
                   document.getElementById("msgAG").innerHTML =
                     "MODO AUTOMATICO ACTIVADO!!!";
@@ -83,6 +88,12 @@
 
                   //modifico la linea en el dom
                   document.getElementById("AUTOMANUAL1").innerHTML = "MANUAL";
+
+                  //quito la clase msgError
+                  document.getElementById("msgAG").classList.remove("msgError");
+                  //pongo la clase msgOk
+                  document.getElementById("msgAG").classList.add("msgOk");
+
                   //paso el msg modo actual MANUAL
                   document.getElementById("msgAG").innerHTML =
                     "MODO MANUAL ACTIVADO!!!";
@@ -269,8 +280,14 @@
           }
         } else {
           console.log("El modo automatico esta desactivado");
+
+          //quito la clase msgError
+          document.getElementById("msgAG").classList.remove("msgOk");
+          //pongo la clase msgOk
+          document.getElementById("msgAG").classList.add("msgError");
+
           document.getElementById("msgAG").innerHTML =
-                    "El modo automatico esta desactivado!!!";
+            "El modo automatico esta desactivado!!!";
         }
       }
       //18h armario grande
@@ -288,8 +305,12 @@
           }
         } else {
           console.log("El modo automatico esta desactivado");
+          //quito la clase msgError
+          document.getElementById("msgAG").classList.remove("msgOk");
+          //pongo la clase msgOk
+          document.getElementById("msgAG").classList.add("msgError");
           document.getElementById("msgAG").innerHTML =
-                    "El modo automatico esta desactivado!!!";
+            "El modo automatico esta desactivado!!!";
         }
       }
 
@@ -304,8 +325,12 @@
           }
         } else {
           console.log("El modo manual esta desactivado");
+          //quito la clase msgError
+          document.getElementById("msgAG").classList.remove("msgOk");
+          //pongo la clase msgOk
+          document.getElementById("msgAG").classList.add("msgError");
           document.getElementById("msgAG").innerHTML =
-                    "El modo manual esta desactivado!!!";
+            "El modo manual esta desactivado!!!";
         }
       }
       function GetButton2() {
@@ -319,8 +344,12 @@
           }
         } else {
           console.log("El modo manual esta desactivado");
+          //quito la clase msgError
+          document.getElementById("msgAG").classList.remove("msgOk");
+          //pongo la clase msgOk
+          document.getElementById("msgAG").classList.add("msgError");
           document.getElementById("msgAG").innerHTML =
-                    "El modo manual esta desactivado!!!";
+            "El modo manual esta desactivado!!!";
         }
       }
     </script>

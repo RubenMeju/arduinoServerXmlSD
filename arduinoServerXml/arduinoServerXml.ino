@@ -40,6 +40,7 @@ int periodo = 1000;
 unsigned long TiempoAhora1;
 unsigned long TiempoAhora2 = 0;
 unsigned long TiempoAhora3 = 0;
+unsigned long TiempoAhora4 = 0;
 
 void setup()
 {
@@ -109,6 +110,9 @@ void setup()
 
 void loop()
 {
+
+    registroDatos();
+
     //si es igual a 1 activamos los modos horarios
     if (AUTOMANUAL_state[0] == 1)
     {
@@ -186,7 +190,25 @@ void listenForClients()
                             }
                             webFile.close();
                         }
-                    } /*/
+                    }
+                    else if (StrContains(HTTP_req, "logTemp.txt"))
+                    {
+                        client.println("Content-Type: text/plain");
+                        client.println("Connection: keep-alive");
+                        client.println();
+                        // envio de estilos personalizados
+                        webFile = SD.open("logTemp.txt"); // open css file
+                        if (webFile)
+                        {
+                            while (webFile.available())
+                            {
+                                client.write(webFile.read()); // send css to client
+                            }
+                            webFile.close();
+                        }
+                    }
+
+                    /*/
                     else if (StrContains(HTTP_req, "GET /img/focooff.png"))
                     {
                         Serial.println("img/focooff.png");
@@ -581,34 +603,43 @@ void control_AG()
         }
     }
 }
-/*
-//armario pequeño
-void control_AP()
+
+//Guarda un registro de la temperatura del armario grande
+void registroDatos()
 {
-    if (millis() > TiempoAhora13 + periodo)
+    if (millis() > TiempoAhora4 + 60000)
     {
-        TiempoAhora13 = millis();
+        TiempoAhora4 = millis();
+        Serial.println("RegistroDatos");
 
-        Serial.println("CONTROL AP - estoy controlando el encendido del armario pequeño");
+        String dataString = "";
+        //abro el archivo
+        File dataFile = SD.open("logTemp.txt", FILE_WRITE);
 
-        estadoApModoLuz = EEPROM.read(1);
+        int t1, h1, t2, h2;
 
-        if (estadoApModoLuz == 1)
+        dt = clock.getDateTime();
+        t1 = dht1.readTemperature();
+        h1 = dht1.readHumidity();
+        t2 = dht2.readTemperature();
+        h2 = dht2.readHumidity();
+
+        dataString += String(dt.day) + String(":") + String(dt.month) + String(":") + String(dt.year) + String(",") +
+                      String(dt.hour) + String(":") + String(dt.minute) + String(",") +
+                      String("T1: ") + String(t1) + String(" C") + String(",") + String(h1) + String(" H") + String(",") +
+                      String("T2: ") + String(t2) + String(" C") + String(",") + String(h2) + String(" H");
+        if (dataFile)
         {
-            ap_modo12h();
-        }
-        else if (estadoApModoLuz == 2)
-        {
-            ap_modo18h();
+            dataFile.print((millis() / 60000));
+            dataFile.print(", ");
+            dataFile.println(dataString);
+            dataFile.close();
+            Serial.println("dataString: ");
+            Serial.println(dataString);
         }
         else
         {
-            Serial.println("modo luz armario pequeño sin selecionar");
-
-            digitalWrite(RELES[5], HIGH);
-            digitalWrite(RELES[6], HIGH);
-            digitalWrite(RELES[7], HIGH);
-            digitalWrite(ledAmarillo, LOW);
+            Serial.println("error al abrir logTemp.txt");
         }
     }
-}*/
+}

@@ -363,10 +363,17 @@
     <!--Armario grande-->
     <div class="contArmario">
       <h3>Armario Grande</h3>
+
+      <h3>Crecimiento(18h) o floracion(12)</h3>
+      <h3>semana en la que estamos</h3>
       <div class="bordeArmario">
         <!-- <img src="img/svg.svg" alt="" class="imgAG" />  -->
 
         <div class="ladosArm izq">
+          
+          <p>t1 maxima</p>
+          <p>t1 minima</p>
+          
           <div class="contfoco1">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 64">
               <title>Lightbulb</title>
@@ -404,9 +411,13 @@
             </svg>
           </div>
           <h4>T: <span id="T1" class="digital2">...</span></h4>
+          <!--la V modificarla por un dibujo de un ventilador-->
+          <p>V:maximo</p>
         </div>
 
         <div class="ladosArm der">
+          <p>t2 maxima</p>
+          <p>t2 minima</p>
           <div class="contfoco2">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 64">
               <title>Lightbulb</title>
@@ -444,6 +455,8 @@
             </svg>
           </div>
           <h4>T: <span id="T2" class="digital3">...</span></h4>
+        <!--la V modificarla por un dibujo de un ventilador-->
+        <p>V: minimo</p>
         </div>
       </div>
 
@@ -485,6 +498,7 @@
         </section>
 
         <section class="manual">
+          <h4>botones modo manual</h4>
           <button type="button" id="LED1" class="btnOff" onclick="GetButton1()">
             FOCO 1 OFF (D8)
           </button>
@@ -497,3 +511,35 @@
     </div>
   </body>
 </html>
+
+
+
+
+<!--  
+
+  botones para controlar cada rele por separado del modo manual
+
+  en plantula armario pequeño necesitamos un modo que 
+
+  armario pequeño
+
+  modo crecimiento minimo = foco y extracion
+  modo crecimineto medio = foco y extracion y intracion
+  modo crecimineot alto = foco extracion y intractor y ventilador
+
+
+  armario grande
+
+  modo crecimiento minimo = foco y extracion
+  modo crecimiento medio = foco y extracion y intractor
+  modo crecimiento alto ?= foco y extracion y numero 4 de la hoja
+
+  modo floracion
+  minimo = foco extracion intractor y 4 de la hoja
+  medio = foco extracion intractor y 4 5 de la hoja
+  maximo = foco extra intra y 4 5 6 de la hoja
+
+  modo apagado todo por separado de los armarios
+
+  
+-->

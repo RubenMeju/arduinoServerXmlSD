@@ -9,6 +9,15 @@
 // size of buffer used to capture HTTP requests
 #define REQ_BUF_SZ 60
 
+//Reles
+#define rele1 38
+#define rele2 36
+#define rele3 34
+#define rele4 32
+
+const unsigned char RELES[] = {rele1, rele2, rele3, rele4};
+char r = 0;
+
 DHT dht1(2, DHT11);
 DHT dht2(3, DHT11);
 File HMTL_file;
@@ -44,54 +53,58 @@ unsigned long TiempoAhora4 = 0;
 
 void setup()
 {
-    //EEPROM.write(0, 1);
-    //EEPROM.write(1, 1);
     // disable Ethernet chip
     pinMode(10, OUTPUT);
     digitalWrite(10, HIGH);
+    
+    //RELES
+    for (r = 0; r < 4; r++)
+        pinMode(RELES[r], OUTPUT);
 
-    Serial.begin(9600); // for debugging
+    //INICIO LOS RELES EN APAGADO!!!
+    for (r = 0; r < 4; r++)
+    {
+        digitalWrite(RELES[r], HIGH);
+    }
+
+    Serial.begin(9600);
     clock.begin();
     //clock.setDateTime(__DATE__, __TIME__); //--establece la hora, solo la primera vez q se sube el codigo.                  /// clock.begin();
+
     dht1.begin();
     dht2.begin();
-    //inicializar el lcd
-    /* lcd.init();
-    lcd.backlight();
-    lcd.setCursor(3, 0);
-    lcd.print("--MEJURDINO--");
-    delay(1000);*/
 
-    // initialize SD card
-    Serial.println("Initializing SD card...");
+    // Iniciar SD card
+    Serial.println("Iniciando SD card...");
     if (!SD.begin(4))
     {
-        Serial.println("ERROR - SD card initialization failed!");
-        return; // init failed
+        Serial.println("ERROR - SD card!");
+        return;
     }
-    Serial.println("SUCCESS - SD card initialized.");
+    Serial.println("SUCCESS - SD card iniciada.");
     // check for index.htm file
     if (!SD.exists("index.htm"))
     {
-        Serial.println("ERROR - Can't find index.htm file!");
-        return; // can't find index file
+        Serial.println("ERROR - No se puede encontrar index.htm!");
+        return;
     }
-    Serial.println("SUCCESS - Found index.htm file.");
-    // switches on pins 2, 3 and 5
+    Serial.println("SUCCESS - Archivo index.htm encontrado.");
+    // dht 1 y 2
     pinMode(2, INPUT);
+    pinMode(3, INPUT);
     //pinMode(3, INPUT);
     // pinMode(5, INPUT);
     // LEDs
-    pinMode(6, OUTPUT);
-    pinMode(7, OUTPUT);
+    //pinMode(6, OUTPUT);
+    //pinMode(7, OUTPUT);
     pinMode(8, OUTPUT);
     pinMode(9, OUTPUT);
 
-    Ethernet.begin(mac, ip); // initialize Ethernet device
-                             // Verificar que el Ethernet Shield está correctamente conectado.
+    Ethernet.begin(mac, ip);
+    // Verificar que el Ethernet Shield está correctamente conectado.
     if (Ethernet.hardwareStatus() == EthernetNoHardware)
     {
-        Serial.println("Ethernet shield no presente :(");
+        Serial.println("Shield Ethernet error :(");
         while (true)
         {
             delay(1); // do nothing, no point running without Ethernet hardware
@@ -285,7 +298,7 @@ void listenForClients()
         client.stop(); // close the connection
     }                  // end if (client)
 }
-// checks if received HTTP request is switching on/off LEDs
+
 // also saves the state of the LEDs
 void SetLEDs(void)
 {
@@ -331,26 +344,30 @@ void SetLEDs(void)
     {
         LED_state[0] = 1; // save LED state
         digitalWrite(8, HIGH);
+        digitalWrite(RELES[0], LOW);
     }
     else if (StrContains(HTTP_req, "LED1=0"))
     {
         LED_state[0] = 0; // save LED state
         digitalWrite(8, LOW);
+        digitalWrite(RELES[0], HIGH);
     }
     // LED 2 (pin 9)
     if (StrContains(HTTP_req, "LED2=1"))
     {
         LED_state[1] = 1; // save LED state
         digitalWrite(9, HIGH);
+        digitalWrite(RELES[1], LOW);
     }
     else if (StrContains(HTTP_req, "LED2=0"))
     {
         LED_state[1] = 0; // save LED state
         digitalWrite(9, LOW);
+        digitalWrite(RELES[1], HIGH);
     }
 }
 
-// send the XML file with analog values, switch status and LED status
+// envio el archivo xml
 void XML_response(EthernetClient cl)
 {
     int t1, h1, t2, h2;
@@ -448,8 +465,7 @@ void XML_response(EthernetClient cl)
 
     // button MODOAG 12 horas armario grande
     cl.print("<MODOAG>");
-    // Serial.println("ModoAG_state[0");
-    // Serial.println(MODOAG_state[0]);
+
     if (MODOAG_state[0])
     {
         cl.print("on");
@@ -462,8 +478,7 @@ void XML_response(EthernetClient cl)
 
     // button MODOAG 18 horas armario grande
     cl.print("<MODOAG>");
-    //  Serial.println("ModoAG_state[1");
-    // Serial.println(MODOAG_state[1]);
+
     if (MODOAG_state[1])
     {
         cl.print("on");
@@ -561,6 +576,9 @@ void ag_modo12h()
             //foco 2 = lado derecho del armario
             LED_state[1] = 1; // save LED state
             digitalWrite(9, HIGH);
+
+            digitalWrite(RELES[0], LOW);
+            digitalWrite(RELES[1], LOW);
         }
         else
         {
@@ -570,6 +588,9 @@ void ag_modo12h()
             //foco 2 = lado derecho del armario
             LED_state[1] = 0; // save LED state
             digitalWrite(9, LOW);
+
+            digitalWrite(RELES[0], HIGH);
+            digitalWrite(RELES[1], HIGH);
         }
     }
 }
@@ -581,7 +602,7 @@ void ag_modo18h()
         TiempoAhora2 = millis();
         Serial.println("EJECUTANDO MODO18H");
         dt = clock.getDateTime();
-        if (dt.minute == 33 || dt.hour == 20 || dt.hour == 21 || dt.hour == 22 || dt.hour == 23 || dt.hour == 00 || dt.hour == 1 || dt.hour == 2 || dt.hour == 3 || dt.hour == 4 || dt.hour == 5 || dt.hour == 6 || dt.hour == 7 || dt.hour == 8 || dt.hour == 9 || dt.hour == 10 || dt.hour == 11 || dt.hour == 12)
+        if (dt.minute == 3 || dt.hour == 20 || dt.hour == 21 || dt.hour == 22 || dt.hour == 23 || dt.hour == 00 || dt.hour == 1 || dt.hour == 2 || dt.hour == 3 || dt.hour == 4 || dt.hour == 5 || dt.hour == 6 || dt.hour == 7 || dt.hour == 8 || dt.hour == 9 || dt.hour == 10 || dt.hour == 11 || dt.hour == 12)
         {
             //foco1 = lado izquierdo del armario
             LED_state[0] = 1; // save LED state
@@ -589,6 +610,9 @@ void ag_modo18h()
             //foco 2 = lado derecho del armario
             LED_state[1] = 1; // save LED state
             digitalWrite(9, HIGH);
+
+            digitalWrite(RELES[0], LOW);
+            digitalWrite(RELES[1], LOW);
         }
         else
         {
@@ -598,6 +622,9 @@ void ag_modo18h()
             //foco 2 = lado derecho del armario
             LED_state[1] = 0; // save LED state
             digitalWrite(9, LOW);
+
+            digitalWrite(RELES[0], HIGH);
+            digitalWrite(RELES[1], HIGH);
         }
     }
 }

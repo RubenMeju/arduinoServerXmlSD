@@ -12,12 +12,15 @@
       strMODOAG2 = "";
       strLED1 = "";
       strLED2 = "";
+      strINTRACTOR1 = "";
 
       var AUTOMANUAL1_state = 0;
       var MODOAG1_state = 0;
       var MODOAG2_state = 0;
       var LED1_state = 0;
       var LED2_state = 0;
+      var INTRACTOR1_state = 0;
+
       function GetArduinoIO() {
         nocache = "&nocache=" + Math.random() * 1000000;
         var request = new XMLHttpRequest();
@@ -219,6 +222,30 @@
                   document.getElementById("LED2").innerHTML = "FOCO 2 OFF(D9)";
                   LED2_state = 0;
                 }
+
+                // ****************************************    INTRACTOR
+                if (
+                  this.responseXML.getElementsByTagName("INTRACTOR")[0].childNodes[0]
+                    .nodeValue === "on"
+                ) {
+                 
+                  //pongo clase a boton
+                  //pongo la clase btnoINTRACTOR1
+                  document.getElementById("INTRACTOR1").classList.add("btnOn");
+                  //quito la clase Off
+                  document.getElementById("INTRACTOR1").classList.remove("btnOff");
+
+                  document.getElementById("INTRACTOR1").innerHTML = "INTRACTOR ON (D9)";
+                  INTRACTOR1_state = 1;
+                } else {
+                 
+                  //quito la clase ON
+                  document.getElementById("INTRACTOR1").classList.remove("btnOn");
+                  //pongo la clase btnon OFF
+                  document.getElementById("INTRACTOR1").classList.add("btnOff");
+                  document.getElementById("INTRACTOR1").innerHTML = "INTRACTOR OFF(D9)";
+                  INTRACTOR1_state = 0;
+                }
               }
             }
           }
@@ -232,6 +259,7 @@
             strMODOAG2 +
             strLED1 +
             strLED2 +
+            strINTRACTOR1 +
             nocache,
           true
         );
@@ -242,6 +270,7 @@
         strMODOAG2 = "";
         strLED1 = "";
         strLED2 = "";
+        strINTRACTOR1 = "";
       }
       //MODO AUTOMATICO O MANUAL
       function modoAutoManual() {
@@ -341,6 +370,26 @@
           } else {
             LED2_state = 1;
             strLED2 = "&LED2=1";
+          }
+        } else {
+          console.log("El modo manual esta desactivado");
+          //quito la clase msgError
+          document.getElementById("msgAG").classList.remove("msgOk");
+          //pongo la clase msgOk
+          document.getElementById("msgAG").classList.add("msgError");
+          document.getElementById("msgAG").innerHTML =
+            "El modo manual esta desactivado!!!";
+        }
+      }
+
+      function GetButton3() {
+        if (AUTOMANUAL1_state == 0) {
+          if (INTRACTOR1_state === 1) {
+            INTRACTOR1_state = 0;
+            strINTRACTOR1 = "&INTRACTOR1=0";
+          } else {
+            INTRACTOR1_state = 1;
+            strINTRACTOR1 = "&INTRACTOR1=1";
           }
         } else {
           console.log("El modo manual esta desactivado");
@@ -505,6 +554,10 @@
 
           <button type="button" id="LED2" class="btnOff" onclick="GetButton2()">
             FOCO 2 OFF (D9)
+          </button>
+
+          <button type="button" id="INTRACTOR1" class="btnOff" onclick="GetButton3()">
+            intractor OFF (D37)
           </button>
         </section>
       </div>
